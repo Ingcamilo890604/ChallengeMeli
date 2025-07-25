@@ -1,0 +1,235 @@
+[
+  {
+    "id": "prod-001",
+    "title": "Smartphone Samsung Galaxy S21",
+    "description": "Último modelo de Samsung con cámara de alta resolución y pantalla AMOLED",
+    "price": 799.99,
+    "images": [
+      "/assets/images/samsung-s21/samsung-s21-1.html",
+      "/assets/images/samsung-s21/samsung-s21-2.html"
+    ],
+    "paymentMethods": [
+      {
+        "id": "pm-001",
+        "name": "Tarjeta de Crédito",
+        "description": "Visa, Mastercard, American Express"
+      },
+      {
+        "id": "pm-002",
+        "name": "PayPal",
+        "description": "Pago seguro online"
+      }
+    ],
+    "seller": {
+      "id": "seller-001",
+      "name": "Electrónica Moderna",
+      "email": "ventas@electronicamoderna.com",
+      "phone": "+5491155667788",
+      "rating": 4.8
+    },
+    "stock": 50,
+    "rating": 4.7,
+    "reviews": [
+      {
+        "id": "rev-001",
+        "userId": "user-001",
+        "userName": "Carlos Rodríguez",
+        "comment": "Excelente teléfono, la batería dura todo el día",
+        "rating": 5,
+        "createdAt": "2025-07-20T10:30:00"
+      },
+      {
+        "id": "rev-002",
+        "userId": "user-002",
+        "userName": "Ana Martínez",
+        "comment": "Buena cámara pero se calienta un poco con uso intensivo",
+        "rating": 4,
+        "createdAt": "2025-07-21T15:45:00"
+      }
+    ]
+  },
+  {
+    "id": "prod-002",
+    "title": "Laptop Dell XPS 15",
+    "description": "Potente laptop con procesador Intel i7, 16GB RAM y SSD de 512GB",
+    "price": 1299.99,
+    "images": [
+      "/assets/images/dell-xps/dell-xps-1.html",
+      "/assets/images/dell-xps/dell-xps-2.html"
+    ],
+    "paymentMethods": [
+      {
+        "id": "pm-001",
+        "name": "Tarjeta de Crédito",
+        "description": "Visa, Mastercard, American Express"
+      },
+      {
+        "id": "pm-003",
+        "name": "Transferencia Bancaria",
+        "description": "Pago mediante transferencia"
+      }
+    ],
+    "seller": {
+      "id": "seller-002",
+      "name": "Informática Total",
+      "email": "ventas@informaticatotal.com",
+      "phone": "+5491144556677",
+      "rating": 4.5
+    },
+    "stock": 15,
+    "rating": 4.9,
+    "reviews": [
+      {
+        "id": "rev-003",
+        "userId": "user-003",
+        "userName": "Miguel Sánchez",
+        "comment": "Increíble rendimiento para trabajo y gaming",
+        "rating": 5,
+        "createdAt": "2025-07-18T09:15:00"
+      }
+    ]
+  },
+  {
+    "id": "prod-003",
+    "title": "Auriculares Sony WH-1000XM4",
+    "description": "Auriculares inalámbricos con cancelación de ruido",
+    "price": 349.99,
+    "images": [
+      "/assets/images/sony-wh1000xm4/sony-wh1000xm4-1.html"
+    ],
+    "paymentMethods": [
+      {
+        "id": "pm-001",
+        "name": "Tarjeta de Crédito",
+        "description": "Visa, Mastercard, American Express"
+      },
+      {
+        "id": "pm-002",
+        "name": "PayPal",
+        "description": "Pago seguro online"
+      }
+    ],
+    "seller": {
+      "id": "seller-001",
+      "name": "Electrónica Moderna",
+      "email": "ventas@electronicamoderna.com",
+      "phone": "+5491155667788",
+      "rating": 4.8
+    },
+    "stock": 30,
+    "rating": 4.8,
+    "reviews": [
+      {
+        "id": "rev-004",
+        "userId": "user-004",
+        "userName": "Laura Gómez",
+        "comment": "La cancelación de ruido es impresionante",
+        "rating": 5,
+        "createdAt": "2025-07-15T14:20:00"
+      },
+      {
+        "id": "rev-005",
+        "userId": "user-005",
+        "userName": "Pedro Alonso",
+        "comment": "Buena calidad de sonido pero un poco caros",
+        "rating": 4,
+        "createdAt": "2025-07-16T11:30:00"
+      }
+    ]
+  },
+  {
+    "id": "prod-004",
+    "title": "Smart TV LG OLED 55\"",
+    "description": "Televisor OLED 4K con HDR y sistema webOS",
+    "price": 1499.99,
+    "images": [
+      "/assets/images/lg-oled/lg-oled-1.html",
+      "/assets/images/lg-oled/lg-oled-2.html"
+    ],
+    "paymentMethods": [
+      {
+        "id": "pm-001",
+        "name": "Tarjeta de Crédito",
+        "description": "Visa, Mastercard, American Express"
+      },
+      {
+        "id": "pm-003",
+        "name": "Transferencia Bancaria",
+        "description": "Pago mediante transferencia"
+      },
+      {
+        "id": "pm-004",
+        "name": "Financiación",
+        "description": "Hasta 12 cuotas sin interés"
+      }
+    ],
+    "seller": {
+      "id": "seller-003",
+      "name": "Hogar Digital",
+      "email": "ventas@hogardigital.com",
+      "phone": "+5491133445566",
+      "rating": 4.6
+    },
+    "stock": 10,
+    "rating": 4.7,
+    "reviews": [
+      {
+        "id": "rev-006",
+        "userId": "user-006",
+        "userName": "Javier López",
+        "comment": "Calidad de imagen espectacular",
+        "rating": 5,
+        "createdAt": "2025-07-10T18:45:00"
+      }
+    ]
+  },
+  {
+    "id": "prod-005",
+    "title": "Zapatillas Nike Air Max",
+    "description": "Zapatillas deportivas con cámara de aire visible",
+    "price": 129.99,
+    "images": [
+      "/assets/images/nike-airmax/nike-airmax-1.html",
+      "/assets/images/nike-airmax/nike-airmax-2.html"
+    ],
+    "paymentMethods": [
+      {
+        "id": "pm-001",
+        "name": "Tarjeta de Crédito",
+        "description": "Visa, Mastercard, American Express"
+      },
+      {
+        "id": "pm-002",
+        "name": "PayPal",
+        "description": "Pago seguro online"
+      }
+    ],
+    "seller": {
+      "id": "seller-004",
+      "name": "Deportes Online",
+      "email": "ventas@deportesonline.com",
+      "phone": "+5491122334455",
+      "rating": 4.3
+    },
+    "stock": 25,
+    "rating": 4.5,
+    "reviews": [
+      {
+        "id": "rev-007",
+        "userId": "user-007",
+        "userName": "Martín García",
+        "comment": "Muy cómodas y el diseño es genial",
+        "rating": 5,
+        "createdAt": "2025-07-05T12:10:00"
+      },
+      {
+        "id": "rev-008",
+        "userId": "user-008",
+        "userName": "Sofía Rodríguez",
+        "comment": "Buena calidad pero un poco ajustadas de talle",
+        "rating": 4,
+        "createdAt": "2025-07-08T09:30:00"
+      }
+    ]
+  }
+]
