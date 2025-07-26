@@ -5,8 +5,8 @@
     "description": "Último modelo de Samsung con cámara de alta resolución y pantalla AMOLED",
     "price": 799.99,
     "images": [
-      "/assets/images/samsung-s21/samsung-s21-1.html",
-      "/assets/images/samsung-s21/samsung-s21-2.html"
+      "assets/images/samsung-s21/samsung-galaxy-s21.jpg",
+      "assets/images/samsung-s21/samsung-s21-2.html"
     ],
     "paymentMethods": [
       {
@@ -54,8 +54,8 @@
     "description": "Potente laptop con procesador Intel i7, 16GB RAM y SSD de 512GB",
     "price": 1299.99,
     "images": [
-      "/assets/images/dell-xps/dell-xps-1.html",
-      "/assets/images/dell-xps/dell-xps-2.html"
+      "/assets/images/dell-xps/dell-xps-1.jpeg",
+      "/assets/images/dell-xps/dell-xps-2.jpg"
     ],
     "paymentMethods": [
       {
@@ -189,8 +189,8 @@
     "description": "Zapatillas deportivas con cámara de aire visible",
     "price": 129.99,
     "images": [
-      "/assets/images/nike-airmax/nike-airmax-1.html",
-      "/assets/images/nike-airmax/nike-airmax-2.html"
+      "/assets/images/nike-airmax/nike-airmax-1.jpeg",
+      "/assets/images/nike-airmax/nike-airmax-2.jpeg"
     ],
     "paymentMethods": [
       {
