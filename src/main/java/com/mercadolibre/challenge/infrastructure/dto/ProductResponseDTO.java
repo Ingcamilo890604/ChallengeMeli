@@ -21,5 +21,6 @@ public record ProductResponseDTO(
     SellerDTO seller,
     Integer stock,
     Double rating,
-    List<ReviewDTO> reviews
+    List<ReviewDTO> reviews,
+    String type
 ) {}

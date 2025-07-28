@@ -16,6 +16,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -94,7 +95,7 @@ class ProductMapperTest {
                         .build()
         );
 
-        testReviewDTOs = Arrays.asList(
+        testReviewDTOs = Collections.singletonList(
                 ReviewDTO.builder()
                         .id("rev-001")
                         .userId("user-001")

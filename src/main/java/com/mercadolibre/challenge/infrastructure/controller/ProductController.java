@@ -2,6 +2,7 @@ package com.mercadolibre.challenge.infrastructure.controller;
 
 import com.mercadolibre.challenge.domain.port.input.GetAllProductsUseCasePort;
 import com.mercadolibre.challenge.domain.port.input.GetProductByIdUseCasePort;
+import com.mercadolibre.challenge.domain.port.input.GetProductsByTypeUseCasePort;
 import com.mercadolibre.challenge.infrastructure.dto.ProductResponseDTO;
 import com.mercadolibre.challenge.infrastructure.mapper.ProductMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -32,6 +33,7 @@ public class ProductController {
 
     private final GetProductByIdUseCasePort getProductByIdUseCasePort;
     private final GetAllProductsUseCasePort getAllProductsUseCase;
+    private final GetProductsByTypeUseCasePort getProductsByTypeUseCasePort;
     private final ProductMapper productMapper;
 
     /**
@@ -73,5 +75,25 @@ public class ProductController {
                 .thenApply(optionalProduct -> optionalProduct
                         .map(product -> ResponseEntity.ok(productMapper.toResponseDTO(product)))
                         .orElse(ResponseEntity.notFound().build()));
+    }
+    
+    /**
+     * Get products by type
+     * @param type the product type to filter by
+     * @return a list of products of the specified type
+     */
+    @Operation(summary = "Get products by type", description = "Returns a list of products filtered by type")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved list of products",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = ProductResponseDTO.class)))
+    })
+    @GetMapping("/type/{type}")
+    public CompletableFuture<ResponseEntity<List<ProductResponseDTO>>> getProductsByType(
+            @Parameter(description = "Type of products to retrieve", required = true)
+            @PathVariable String type) {
+        log.info("REST request to get products with type: {}", type);
+        return getProductsByTypeUseCasePort.execute(type)
+                .thenApply(products -> ResponseEntity.ok(productMapper.toResponseDTOs(products)));
     }
 }

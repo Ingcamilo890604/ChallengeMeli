@@ -33,5 +33,7 @@ public record ProductRequestDTO(
     @Valid
     SellerDTO seller,
     
-    Integer stock
+    Integer stock,
+    
+    String type
 ) {}

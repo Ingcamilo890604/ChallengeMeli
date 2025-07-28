@@ -23,4 +23,5 @@ public class Product {
     private Integer stock;
     private Double rating;
     private List<Review> reviews;
+    private String type;
 }

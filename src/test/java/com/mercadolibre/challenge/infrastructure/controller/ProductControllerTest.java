@@ -3,6 +3,7 @@ package com.mercadolibre.challenge.infrastructure.controller;
 import com.mercadolibre.challenge.domain.model.Product;
 import com.mercadolibre.challenge.domain.port.input.GetAllProductsUseCasePort;
 import com.mercadolibre.challenge.domain.port.input.GetProductByIdUseCasePort;
+import com.mercadolibre.challenge.domain.port.input.GetProductsByTypeUseCasePort;
 import com.mercadolibre.challenge.infrastructure.dto.ProductResponseDTO;
 import com.mercadolibre.challenge.infrastructure.mapper.ProductMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,12 +17,14 @@ import org.springframework.http.ResponseEntity;
 
 import java.math.BigDecimal;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -33,6 +36,9 @@ class ProductControllerTest {
 
     @Mock
     private GetAllProductsUseCasePort getAllProductsUseCasePort;
+
+    @Mock
+    private GetProductsByTypeUseCasePort getProductsByTypeUseCasePort;
 
     @Mock
     private ProductMapper productMapper;
@@ -54,6 +60,7 @@ class ProductControllerTest {
                 .title("Test Product")
                 .description("Test Description")
                 .price(new BigDecimal("99.99"))
+                .type("electronics")
                 .build();
 
         // Set up test product response DTO
@@ -62,6 +69,7 @@ class ProductControllerTest {
                 .title("Test Product")
                 .description("Test Description")
                 .price(new BigDecimal("99.99"))
+                .type("electronics")
                 .build();
 
         // Set up test products list
@@ -72,6 +80,7 @@ class ProductControllerTest {
                         .title("Test Product 2")
                         .description("Test Description 2")
                         .price(new BigDecimal("199.99"))
+                        .type("clothing")
                         .build()
         );
 
@@ -83,6 +92,7 @@ class ProductControllerTest {
                         .title("Test Product 2")
                         .description("Test Description 2")
                         .price(new BigDecimal("199.99"))
+                        .type("clothing")
                         .build()
         );
     }
@@ -134,5 +144,47 @@ class ProductControllerTest {
         // Assert
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         verify(getProductByIdUseCasePort).execute(nonExistentId);
+    }
+    
+    @Test
+    void getProductsByType_shouldReturnProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
+        // Arrange
+        String type = "electronics";
+        List<Product> electronicsProducts = List.of(testProduct);
+        List<ProductResponseDTO> electronicsProductDTOs = List.of(testProductResponseDTO);
+        
+        when(getProductsByTypeUseCasePort.execute(type)).thenReturn(CompletableFuture.completedFuture(electronicsProducts));
+        when(productMapper.toResponseDTOs(electronicsProducts)).thenReturn(electronicsProductDTOs);
+
+        // Act
+        CompletableFuture<ResponseEntity<List<ProductResponseDTO>>> result = productController.getProductsByType(type);
+        ResponseEntity<List<ProductResponseDTO>> responseEntity = result.get();
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertEquals(electronicsProductDTOs, responseEntity.getBody());
+        verify(getProductsByTypeUseCasePort).execute(type);
+        verify(productMapper).toResponseDTOs(electronicsProducts);
+    }
+    
+    @Test
+    void getProductsByType_whenNoProductsOfSpecifiedType_shouldReturnEmptyList() throws ExecutionException, InterruptedException {
+        // Arrange
+        String type = "books";
+        List<Product> emptyList = Collections.emptyList();
+        List<ProductResponseDTO> emptyDTOList = Collections.emptyList();
+        
+        when(getProductsByTypeUseCasePort.execute(type)).thenReturn(CompletableFuture.completedFuture(emptyList));
+        when(productMapper.toResponseDTOs(emptyList)).thenReturn(emptyDTOList);
+
+        // Act
+        CompletableFuture<ResponseEntity<List<ProductResponseDTO>>> result = productController.getProductsByType(type);
+        ResponseEntity<List<ProductResponseDTO>> responseEntity = result.get();
+
+        // Assert
+        assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
+        assertTrue(responseEntity.getBody().isEmpty());
+        verify(getProductsByTypeUseCasePort).execute(type);
+        verify(productMapper).toResponseDTOs(emptyList);
     }
 }

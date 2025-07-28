@@ -37,6 +37,7 @@ public class ProductMapper {
                 .stock(requestDTO.stock())
                 .rating(0.0) // Default rating for new products
                 .reviews(new ArrayList<>()) // Empty reviews for new products
+                .type(requestDTO.type())
                 .build();
     }
 
@@ -61,6 +62,7 @@ public class ProductMapper {
                 .stock(product.getStock())
                 .rating(product.getRating())
                 .reviews(mapReviewsToDTOs(product.getReviews()))
+                .type(product.getType())
                 .build();
     }
 
@@ -97,6 +99,7 @@ public class ProductMapper {
         product.setPaymentMethods(mapPaymentMethodsToEntities(requestDTO.paymentMethods()));
         product.setSeller(mapSellerToEntity(requestDTO.seller()));
         product.setStock(requestDTO.stock());
+        product.setType(requestDTO.type());
 
         return product;
     }

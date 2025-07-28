@@ -4,6 +4,7 @@
     "title": "Smartphone Samsung Galaxy S21",
     "description": "Último modelo de Samsung con cámara de alta resolución y pantalla AMOLED",
     "price": 799.99,
+    "type": "smartphone",
     "images": [
       "assets/images/samsung-s21/samsung-galaxy-s21.jpg",
       "assets/images/samsung-s21/samsung-s21-2.html"
@@ -53,6 +54,7 @@
     "title": "Laptop Dell XPS 15",
     "description": "Potente laptop con procesador Intel i7, 16GB RAM y SSD de 512GB",
     "price": 1299.99,
+    "type": "laptop",
     "images": [
       "/assets/images/dell-xps/dell-xps-1.jpeg",
       "/assets/images/dell-xps/dell-xps-2.jpg"
@@ -94,6 +96,7 @@
     "title": "Auriculares Sony WH-1000XM4",
     "description": "Auriculares inalámbricos con cancelación de ruido",
     "price": 349.99,
+    "type": "headphones",
     "images": [
       "/assets/images/sony-wh1000xm4/sony-wh1000xm4-1.html"
     ],
@@ -142,6 +145,7 @@
     "title": "Smart TV LG OLED 55\"",
     "description": "Televisor OLED 4K con HDR y sistema webOS",
     "price": 1499.99,
+    "type": "tv",
     "images": [
       "/assets/images/lg-oled/lg-oled-1.html",
       "/assets/images/lg-oled/lg-oled-2.html"
@@ -188,6 +192,7 @@
     "title": "Zapatillas Nike Air Max",
     "description": "Zapatillas deportivas con cámara de aire visible",
     "price": 129.99,
+    "type": "sneakers",
     "images": [
       "/assets/images/nike-airmax/nike-airmax-1.jpeg",
       "/assets/images/nike-airmax/nike-airmax-2.jpeg"
