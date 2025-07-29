@@ -10,7 +10,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.math.BigDecimal;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
@@ -30,8 +29,7 @@ class GetProductsByTypeUseCaseTest {
     private GetProductsByTypeUseCase getProductsByTypeUseCase;
 
     private Product smartphone;
-    private Product laptop;
-    private Product headphones;
+
 
     @BeforeEach
     void setUp() {
@@ -42,29 +40,13 @@ class GetProductsByTypeUseCaseTest {
                 .price(new BigDecimal("799.99"))
                 .type("smartphone")
                 .build();
-
-        laptop = Product.builder()
-                .id("prod-002")
-                .title("Laptop Dell XPS 15")
-                .description("Potente laptop con procesador Intel i7, 16GB RAM y SSD de 512GB")
-                .price(new BigDecimal("1299.99"))
-                .type("laptop")
-                .build();
-
-        headphones = Product.builder()
-                .id("prod-003")
-                .title("Auriculares Sony WH-1000XM4")
-                .description("Auriculares inalámbricos con cancelación de ruido")
-                .price(new BigDecimal("349.99"))
-                .type("headphones")
-                .build();
     }
 
     @Test
     void shouldReturnProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
         // Given
-        List<Product> allProducts = Arrays.asList(smartphone, laptop, headphones);
-        when(productPort.findAll()).thenReturn(CompletableFuture.completedFuture(allProducts));
+        List<Product> smartphoneProducts = Collections.singletonList(smartphone);
+        when(productPort.findByType("smartphone")).thenReturn(CompletableFuture.completedFuture(smartphoneProducts));
 
         // When
         List<Product> result = getProductsByTypeUseCase.execute("smartphone").get();
@@ -78,8 +60,7 @@ class GetProductsByTypeUseCaseTest {
     @Test
     void shouldReturnEmptyListWhenNoProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
         // Given
-        List<Product> allProducts = Arrays.asList(smartphone, laptop, headphones);
-        when(productPort.findAll()).thenReturn(CompletableFuture.completedFuture(allProducts));
+        when(productPort.findByType("tv")).thenReturn(CompletableFuture.completedFuture(Collections.emptyList()));
 
         // When
         List<Product> result = getProductsByTypeUseCase.execute("tv").get();
@@ -91,7 +72,7 @@ class GetProductsByTypeUseCaseTest {
     @Test
     void shouldReturnEmptyListWhenNoProducts() throws ExecutionException, InterruptedException {
         // Given
-        when(productPort.findAll()).thenReturn(CompletableFuture.completedFuture(Collections.emptyList()));
+        when(productPort.findByType("smartphone")).thenReturn(CompletableFuture.completedFuture(Collections.emptyList()));
 
         // When
         List<Product> result = getProductsByTypeUseCase.execute("smartphone").get();
