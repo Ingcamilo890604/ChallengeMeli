@@ -1,5 +1,7 @@
 package com.mercadolibre.challenge.domain.port.input;
 
+import com.mercadolibre.challenge.domain.model.Page;
+import com.mercadolibre.challenge.domain.model.PageRequest;
 import com.mercadolibre.challenge.domain.model.Product;
 
 import java.util.List;
@@ -17,4 +19,11 @@ public interface GetAllProductsUseCasePort {
      * @return a CompletableFuture containing a list of all products
      */
     CompletableFuture<List<Product>> execute();
+    
+    /**
+     * Get all products with pagination
+     * @param pageRequest the pagination information
+     * @return a CompletableFuture containing a page of products
+     */
+    CompletableFuture<Page<Product>> execute(PageRequest pageRequest);
 }

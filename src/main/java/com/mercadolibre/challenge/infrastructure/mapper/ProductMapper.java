@@ -1,5 +1,6 @@
 package com.mercadolibre.challenge.infrastructure.mapper;
 
+import com.mercadolibre.challenge.domain.model.Page;
 import com.mercadolibre.challenge.domain.model.PaymentMethod;
 import com.mercadolibre.challenge.domain.model.Product;
 import com.mercadolibre.challenge.domain.model.Review;
@@ -79,6 +80,29 @@ public class ProductMapper {
         return products.stream()
                 .map(this::toResponseDTO)
                 .toList();
+    }
+    
+    /**
+     * Convert a Page of Product entities to a PageResponseDTO of ProductResponseDTOs
+     * @param page the Page of Product entities
+     * @return the PageResponseDTO of ProductResponseDTOs
+     */
+    public PageResponseDTO<ProductResponseDTO> toPageResponseDTO(Page<Product> page) {
+        if (page == null) {
+            return PageResponseDTO.<ProductResponseDTO>builder().build();
+        }
+        
+        List<ProductResponseDTO> content = toResponseDTOs(page.getContent());
+        
+        return PageResponseDTO.<ProductResponseDTO>builder()
+                .content(content)
+                .totalElements(page.getTotalElements())
+                .totalPages(page.getTotalPages())
+                .page(page.getPage())
+                .size(page.getSize())
+                .hasPrevious(page.hasPrevious())
+                .hasNext(page.hasNext())
+                .build();
     }
 
     /**

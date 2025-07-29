@@ -1,8 +1,10 @@
 package com.mercadolibre.challenge.infrastructure.controller;
 
+import com.mercadolibre.challenge.domain.model.PageRequest;
 import com.mercadolibre.challenge.domain.port.input.GetAllProductsUseCasePort;
 import com.mercadolibre.challenge.domain.port.input.GetProductByIdUseCasePort;
 import com.mercadolibre.challenge.domain.port.input.GetProductsByTypeUseCasePort;
+import com.mercadolibre.challenge.infrastructure.dto.PageResponseDTO;
 import com.mercadolibre.challenge.infrastructure.dto.ProductResponseDTO;
 import com.mercadolibre.challenge.infrastructure.mapper.ProductMapper;
 import io.swagger.v3.oas.annotations.Operation;
@@ -52,6 +54,30 @@ public class ProductController {
         return getAllProductsUseCase.execute()
                 .thenApply(products -> ResponseEntity.ok(productMapper.toResponseDTOs(products)));
     }
+    
+    /**
+     * Get all products with pagination
+     * @param page the page number (0-based)
+     * @param size the page size
+     * @return a page of products
+     */
+    @Operation(summary = "Get all products with pagination", description = "Returns a page of products")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved page of products",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = PageResponseDTO.class)))
+    })
+    @GetMapping("/page")
+    public CompletableFuture<ResponseEntity<PageResponseDTO<ProductResponseDTO>>> getAllProductsPaginated(
+            @Parameter(description = "Page number (0-based)", example = "0")
+            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size", example = "10")
+            @RequestParam(defaultValue = "10") int size) {
+        log.info("REST request to get all products with pagination: page={}, size={}", page, size);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return getAllProductsUseCase.execute(pageRequest)
+                .thenApply(productPage -> ResponseEntity.ok(productMapper.toPageResponseDTO(productPage)));
+    }
 
     /**
      * Get a product by its ID
@@ -95,5 +121,33 @@ public class ProductController {
         log.info("REST request to get products with type: {}", type);
         return getProductsByTypeUseCasePort.execute(type)
                 .thenApply(products -> ResponseEntity.ok(productMapper.toResponseDTOs(products)));
+    }
+    
+    /**
+     * Get products by type with pagination
+     * @param type the product type to filter by
+     * @param page the page number (0-based)
+     * @param size the page size
+     * @return a page of products of the specified type
+     */
+    @Operation(summary = "Get products by type with pagination", description = "Returns a page of products filtered by type")
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "Successfully retrieved page of products",
+                content = @Content(mediaType = "application/json",
+                schema = @Schema(implementation = PageResponseDTO.class)))
+    })
+    @GetMapping("/type/{type}/page")
+    public CompletableFuture<ResponseEntity<PageResponseDTO<ProductResponseDTO>>> getProductsByTypePaginated(
+            @Parameter(description = "Type of products to retrieve", required = true)
+            @PathVariable String type,
+            @Parameter(description = "Page number (0-based)", example = "0")
+            @RequestParam(defaultValue = "0") int page,
+            @Parameter(description = "Page size", example = "10")
+            @RequestParam(defaultValue = "10") int size) {
+        log.info("REST request to get products with type: {} and pagination: page={}, size={}", 
+                type, page, size);
+        PageRequest pageRequest = PageRequest.of(page, size);
+        return getProductsByTypeUseCasePort.execute(type, pageRequest)
+                .thenApply(productPage -> ResponseEntity.ok(productMapper.toPageResponseDTO(productPage)));
     }
 }
