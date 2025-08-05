@@ -3,6 +3,7 @@ package com.mercadolibre.challenge.infrastructure.adapter.output;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mercadolibre.challenge.domain.exception.ConcurrencyException;
+import com.mercadolibre.challenge.domain.exception.InitializationException;
 import com.mercadolibre.challenge.domain.model.Page;
 import com.mercadolibre.challenge.domain.model.PageRequest;
 import com.mercadolibre.challenge.domain.model.Product;
@@ -25,7 +26,6 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
-import java.util.stream.Collectors;
 
 /**
  * Output adapter for product persistence
@@ -34,7 +34,7 @@ import java.util.stream.Collectors;
  */
 @Repository
 @Slf4j
-public class FileProductAdapter implements ProductPort {
+public class ProductAdapter implements ProductPort {
 
     private final ObjectMapper objectMapper;
     private final String dataFilePath;
@@ -43,8 +43,8 @@ public class FileProductAdapter implements ProductPort {
     private final ConcurrentHashMap<String, List<String>> productsByTypeIndex = new ConcurrentHashMap<>();
     private final ReadWriteLock fileLock = new ReentrantReadWriteLock();
 
-    public FileProductAdapter(ObjectMapper objectMapper, 
-                            @Value("${app.data.file-path:data/products.json}") String dataFilePath) {
+    public ProductAdapter(ObjectMapper objectMapper,
+                          @Value("${app.data.file-path:data/products.json}") String dataFilePath) {
         this.objectMapper = objectMapper;
         this.dataFilePath = dataFilePath;
     }
@@ -60,7 +60,7 @@ public class FileProductAdapter implements ProductPort {
             buildTypeIndex();
         } catch (IOException e) {
             log.error("Error initializing file adapter", e);
-            throw new RuntimeException("Could not initialize file adapter", e);
+            throw new InitializationException("Could not initialize file adapter", e);
         }
     }
 
@@ -135,7 +135,7 @@ public class FileProductAdapter implements ProductPort {
             }
         } catch (IOException e) {
             log.error("Error loading data from file", e);
-            throw new ConcurrencyException("Could not load data from file", e);
+            throw new InitializationException("Could not load data from file", e);
         } finally {
             fileLock.readLock().unlock();
         }

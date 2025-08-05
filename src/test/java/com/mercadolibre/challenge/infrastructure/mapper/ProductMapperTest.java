@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,7 +30,6 @@ class ProductMapperTest {
     private Seller testSeller;
     private SellerDTO testSellerDTO;
     private List<Review> testReviews;
-    private List<ReviewDTO> testReviewDTOs;
     private LocalDateTime testDateTime;
 
     @BeforeEach
@@ -39,7 +37,6 @@ class ProductMapperTest {
         productMapper = new ProductMapper();
         testDateTime = LocalDateTime.of(2025, 7, 20, 10, 30);
 
-        // Set up test payment methods
         testPaymentMethods = Arrays.asList(
                 PaymentMethod.builder()
                         .id("pm-001")
@@ -66,7 +63,6 @@ class ProductMapperTest {
                         .build()
         );
 
-        // Set up test seller
         testSeller = Seller.builder()
                 .id("seller-001")
                 .name("Test Seller")
@@ -83,7 +79,6 @@ class ProductMapperTest {
                 .rating(4.5)
                 .build();
 
-        // Set up test reviews
         testReviews = Arrays.asList(
                 Review.builder()
                         .id("rev-001")
@@ -95,18 +90,7 @@ class ProductMapperTest {
                         .build()
         );
 
-        testReviewDTOs = Collections.singletonList(
-                ReviewDTO.builder()
-                        .id("rev-001")
-                        .userId("user-001")
-                        .userName("Test User")
-                        .comment("Great product")
-                        .rating(5)
-                        .createdAt(testDateTime)
-                        .build()
-        );
 
-        // Set up test product
         testProduct = Product.builder()
                 .id("prod-001")
                 .title("Test Product")
@@ -120,7 +104,6 @@ class ProductMapperTest {
                 .reviews(testReviews)
                 .build();
 
-        // Set up test product request DTO
         testProductRequestDTO = ProductRequestDTO.builder()
                 .title("Test Product")
                 .description("Test Description")
@@ -133,11 +116,9 @@ class ProductMapperTest {
     }
 
     @Test
-    void toEntity_shouldConvertRequestDTOToEntity() {
-        // Act
+    void testToEntityShouldConvertRequestDTOToEntity() {
         Product result = productMapper.toEntity(testProductRequestDTO);
 
-        // Assert
         assertNotNull(result);
         assertEquals(testProductRequestDTO.title(), result.getTitle());
         assertEquals(testProductRequestDTO.description(), result.getDescription());
@@ -147,7 +128,6 @@ class ProductMapperTest {
         assertEquals(0.0, result.getRating());
         assertTrue(result.getReviews().isEmpty());
 
-        // Check payment methods
         assertEquals(testProductRequestDTO.paymentMethods().size(), result.getPaymentMethods().size());
         for (int i = 0; i < testProductRequestDTO.paymentMethods().size(); i++) {
             PaymentMethodDTO dto = testProductRequestDTO.paymentMethods().get(i);
@@ -157,7 +137,6 @@ class ProductMapperTest {
             assertEquals(dto.description(), entity.getDescription());
         }
 
-        // Check seller
         assertEquals(testProductRequestDTO.seller().id(), result.getSeller().getId());
         assertEquals(testProductRequestDTO.seller().name(), result.getSeller().getName());
         assertEquals(testProductRequestDTO.seller().email(), result.getSeller().getEmail());
@@ -166,20 +145,16 @@ class ProductMapperTest {
     }
 
     @Test
-    void toEntity_whenRequestDTOIsNull_shouldReturnNull() {
-        // Act
+    void testToEntityWhenRequestDTOIsNullShouldReturnNull() {
         Product result = productMapper.toEntity(null);
 
-        // Assert
         assertNull(result);
     }
 
     @Test
-    void toResponseDTO_shouldConvertEntityToResponseDTO() {
-        // Act
+    void testToResponseDTOShouldConvertEntityToResponseDTO() {
         ProductResponseDTO result = productMapper.toResponseDTO(testProduct);
 
-        // Assert
         assertNotNull(result);
         assertEquals(testProduct.getId(), result.id());
         assertEquals(testProduct.getTitle(), result.title());
@@ -189,7 +164,6 @@ class ProductMapperTest {
         assertEquals(testProduct.getStock(), result.stock());
         assertEquals(testProduct.getRating(), result.rating());
 
-        // Check payment methods
         assertEquals(testProduct.getPaymentMethods().size(), result.paymentMethods().size());
         for (int i = 0; i < testProduct.getPaymentMethods().size(); i++) {
             PaymentMethod entity = testProduct.getPaymentMethods().get(i);
@@ -199,14 +173,12 @@ class ProductMapperTest {
             assertEquals(entity.getDescription(), dto.description());
         }
 
-        // Check seller
         assertEquals(testProduct.getSeller().getId(), result.seller().id());
         assertEquals(testProduct.getSeller().getName(), result.seller().name());
         assertEquals(testProduct.getSeller().getEmail(), result.seller().email());
         assertEquals(testProduct.getSeller().getPhone(), result.seller().phone());
         assertEquals(testProduct.getSeller().getRating(), result.seller().rating());
 
-        // Check reviews
         assertEquals(testProduct.getReviews().size(), result.reviews().size());
         for (int i = 0; i < testProduct.getReviews().size(); i++) {
             Review entity = testProduct.getReviews().get(i);
@@ -221,23 +193,18 @@ class ProductMapperTest {
     }
 
     @Test
-    void toResponseDTO_whenEntityIsNull_shouldReturnNull() {
-        // Act
+    void testToResponseDTOWhenEntityIsNullShouldReturnNull() {
         ProductResponseDTO result = productMapper.toResponseDTO(null);
 
-        // Assert
         assertNull(result);
     }
 
     @Test
-    void toResponseDTOs_shouldConvertListOfEntitiesToListOfResponseDTOs() {
-        // Arrange
+    void testToResponseDTOsShouldConvertListOfEntitiesToListOfResponseDTOs() {
         List<Product> products = Arrays.asList(testProduct, testProduct);
 
-        // Act
         List<ProductResponseDTO> result = productMapper.toResponseDTOs(products);
 
-        // Assert
         assertEquals(products.size(), result.size());
         for (int i = 0; i < products.size(); i++) {
             ProductResponseDTO dto = result.get(i);
@@ -247,18 +214,15 @@ class ProductMapperTest {
     }
 
     @Test
-    void toResponseDTOs_whenEntitiesListIsNull_shouldReturnEmptyList() {
-        // Act
+    void testToResponseDTOsWhenEntitiesListIsNullShouldReturnEmptyList() {
         List<ProductResponseDTO> result = productMapper.toResponseDTOs(null);
 
-        // Assert
         assertNotNull(result);
         assertTrue(result.isEmpty());
     }
 
     @Test
-    void updateEntityFromDTO_shouldUpdateEntityWithDTOValues() {
-        // Arrange
+    void testUpdateEntityFromDTOShouldUpdateEntityWithDTOValues() {
         Product product = Product.builder()
                 .id("prod-001")
                 .title("Original Title")
@@ -272,40 +236,32 @@ class ProductMapperTest {
                 .reviews(Arrays.asList(testReviews.get(0)))
                 .build();
 
-        // Act
         Product result = productMapper.updateEntityFromDTO(product, testProductRequestDTO);
 
-        // Assert
-        assertEquals("prod-001", result.getId()); // ID should not change
+        assertEquals("prod-001", result.getId());
         assertEquals(testProductRequestDTO.title(), result.getTitle());
         assertEquals(testProductRequestDTO.description(), result.getDescription());
         assertEquals(testProductRequestDTO.price(), result.getPrice());
         assertEquals(testProductRequestDTO.images(), result.getImages());
         assertEquals(testProductRequestDTO.stock(), result.getStock());
-        assertEquals(4.0, result.getRating()); // Rating should not change
-        assertEquals(1, result.getReviews().size()); // Reviews should not change
+        assertEquals(4.0, result.getRating());
+        assertEquals(1, result.getReviews().size());
 
-        // Check payment methods
         assertEquals(testProductRequestDTO.paymentMethods().size(), result.getPaymentMethods().size());
         
-        // Check seller
         assertNotNull(result.getSeller());
         assertEquals(testProductRequestDTO.seller().id(), result.getSeller().getId());
         assertEquals(testProductRequestDTO.seller().name(), result.getSeller().getName());
     }
 
     @Test
-    void updateEntityFromDTO_whenEntityOrDTOIsNull_shouldReturnOriginalEntity() {
-        // Arrange
+    void testUpdateEntityFromDTOWhenEntityOrDTOIsNullShouldReturnOriginalEntity() {
         Product product = Product.builder().id("prod-001").title("Original Title").build();
 
-        // Act - null DTO
         Product result1 = productMapper.updateEntityFromDTO(product, null);
         
-        // Act - null entity
         Product result2 = productMapper.updateEntityFromDTO(null, testProductRequestDTO);
 
-        // Assert
         assertEquals(product, result1);
         assertNull(result2);
     }

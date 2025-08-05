@@ -100,10 +100,17 @@ La aplicación está diseñada para manejar alta concurrencia y ser resiliente a
 
 ### Requisitos Previos
 
+#### Opción 1: Ejecución Local
 - Java 21 o superior
 - Maven
 
+#### Opción 2: Usando Docker
+- Docker
+- Docker Compose
+
 ### Pasos para Ejecutar
+
+#### Opción 1: Ejecución Local
 
 1. Clonar el repositorio
 2. Navegar al directorio del proyecto
@@ -113,24 +120,37 @@ La aplicación está diseñada para manejar alta concurrencia y ser resiliente a
 mvn spring-boot:run
 ```
 
-La aplicación se iniciará en el puerto 8080 por defecto.
+#### Opción 2: Usando Docker
+
+1. Clonar el repositorio
+2. Navegar al directorio del proyecto
+3. Construir y ejecutar la aplicación con Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+Para detener la aplicación:
+
+```bash
+docker-compose down
+```
+
+Para ver los logs de la aplicación:
+
+```bash
+docker-compose logs -f
+```
+
+La aplicación se iniciará en el puerto 8085.
 
 ### Verificación de la Instalación
 
 Para verificar que la aplicación está funcionando correctamente, puedes:
 
-1. Acceder a la documentación Swagger: http://localhost:8080/swagger-ui/index.html
-2. Probar el endpoint de listado de productos: http://localhost:8080/api/products
+1. Acceder a la documentación Swagger: http://localhost:8085/swagger-ui/index.html
+2. Acceder al endpoint de Health de actuator: http://localhost:8085/actuator/health
 
-## Datos de Ejemplo
-
-La aplicación incluye datos de ejemplo que se cargan al inicio:
-
-- Smartphone XYZ Pro
-- Laptop UltraBook
-- Wireless Headphones
-
-Cada producto incluye detalles como precio, imágenes, métodos de pago, información del vendedor y reseñas.
 
 ## Manejo de Errores
 

@@ -51,30 +51,24 @@ class GetAllProductsUseCaseTest {
     }
 
     @Test
-    void execute_whenProductsExist_shouldReturnAllProducts() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testExecuteWhenProductsExistShouldReturnAllProducts() throws ExecutionException, InterruptedException {
         when(productPort.findAll()).thenReturn(CompletableFuture.completedFuture(testProducts));
 
-        // Act
         CompletableFuture<List<Product>> result = getAllProductsUseCase.execute();
         List<Product> products = result.get();
 
-        // Assert
         assertEquals(2, products.size());
         assertEquals(testProducts, products);
         verify(productPort).findAll();
     }
 
     @Test
-    void execute_whenNoProductsExist_shouldReturnEmptyList() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testExecuteWhenNoProductsExistShouldReturnEmptyList() throws ExecutionException, InterruptedException {
         when(productPort.findAll()).thenReturn(CompletableFuture.completedFuture(new ArrayList<>()));
 
-        // Act
         CompletableFuture<List<Product>> result = getAllProductsUseCase.execute();
         List<Product> products = result.get();
 
-        // Assert
         assertTrue(products.isEmpty());
         verify(productPort).findAll();
     }

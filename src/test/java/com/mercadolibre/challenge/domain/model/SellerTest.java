@@ -8,14 +8,12 @@ class SellerTest {
 
     @Test
     void testSellerBuilder() {
-        // Arrange
         String id = "seller-001";
         String name = "Test Seller";
         String email = "seller@test.com";
         String phone = "123456789";
         Double rating = 4.5;
 
-        // Act
         Seller seller = Seller.builder()
                 .id(id)
                 .name(name)
@@ -24,7 +22,6 @@ class SellerTest {
                 .rating(rating)
                 .build();
 
-        // Assert
         assertEquals(id, seller.getId());
         assertEquals(name, seller.getName());
         assertEquals(email, seller.getEmail());
@@ -34,7 +31,6 @@ class SellerTest {
 
     @Test
     void testGettersAndSetters() {
-        // Arrange
         Seller seller = new Seller();
         String id = "seller-002";
         String name = "Another Seller";
@@ -42,14 +38,12 @@ class SellerTest {
         String phone = "987654321";
         Double rating = 3.8;
 
-        // Act
         seller.setId(id);
         seller.setName(name);
         seller.setEmail(email);
         seller.setPhone(phone);
         seller.setRating(rating);
 
-        // Assert
         assertEquals(id, seller.getId());
         assertEquals(name, seller.getName());
         assertEquals(email, seller.getEmail());
@@ -59,7 +53,6 @@ class SellerTest {
 
     @Test
     void testEqualsAndHashCode() {
-        // Arrange
         Seller seller1 = Seller.builder()
                 .id("seller-001")
                 .name("Test Seller")
@@ -84,7 +77,6 @@ class SellerTest {
                 .rating(3.8)
                 .build();
 
-        // Assert
         assertEquals(seller1, seller2);
         assertEquals(seller1.hashCode(), seller2.hashCode());
         assertNotEquals(seller1, seller3);
@@ -93,17 +85,14 @@ class SellerTest {
 
     @Test
     void testToString() {
-        // Arrange
         Seller seller = Seller.builder()
                 .id("seller-001")
                 .name("Test Seller")
                 .email("seller@test.com")
                 .build();
 
-        // Act
         String toString = seller.toString();
 
-        // Assert
         assertTrue(toString.contains("id=seller-001"));
         assertTrue(toString.contains("name=Test Seller"));
         assertTrue(toString.contains("email=seller@test.com"));

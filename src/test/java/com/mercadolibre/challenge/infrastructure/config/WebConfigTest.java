@@ -8,14 +8,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 class WebConfigTest {
 
     @Test
-    void corsConfigurer_shouldReturnWebMvcConfigurer() {
-        // Arrange
+    void testCorsConfigurerShouldReturnWebMvcConfigurer() {
         WebConfig webConfig = new WebConfig();
 
-        // Act
         WebMvcConfigurer configurer = webConfig.corsConfigurer();
 
-        // Assert
         assertNotNull(configurer);
     }
 }

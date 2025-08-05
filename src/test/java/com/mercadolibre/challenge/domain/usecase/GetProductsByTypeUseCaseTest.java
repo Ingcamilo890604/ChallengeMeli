@@ -43,41 +43,32 @@ class GetProductsByTypeUseCaseTest {
     }
 
     @Test
-    void shouldReturnProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
-        // Given
+    void testReturnProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
         List<Product> smartphoneProducts = Collections.singletonList(smartphone);
         when(productPort.findByType("smartphone")).thenReturn(CompletableFuture.completedFuture(smartphoneProducts));
 
-        // When
         List<Product> result = getProductsByTypeUseCase.execute("smartphone").get();
 
-        // Then
         assertEquals(1, result.size());
-        assertEquals("smartphone", result.get(0).getType());
-        assertEquals("prod-001", result.get(0).getId());
+        assertEquals("smartphone", result.getFirst().getType());
+        assertEquals("prod-001", result.getFirst().getId());
     }
 
     @Test
-    void shouldReturnEmptyListWhenNoProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
-        // Given
+    void testReturnEmptyListWhenNoProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
         when(productPort.findByType("tv")).thenReturn(CompletableFuture.completedFuture(Collections.emptyList()));
 
-        // When
         List<Product> result = getProductsByTypeUseCase.execute("tv").get();
 
-        // Then
         assertTrue(result.isEmpty());
     }
 
     @Test
-    void shouldReturnEmptyListWhenNoProducts() throws ExecutionException, InterruptedException {
-        // Given
+    void testReturnEmptyListWhenNoProducts() throws ExecutionException, InterruptedException {
         when(productPort.findByType("smartphone")).thenReturn(CompletableFuture.completedFuture(Collections.emptyList()));
 
-        // When
         List<Product> result = getProductsByTypeUseCase.execute("smartphone").get();
 
-        // Then
         assertTrue(result.isEmpty());
     }
 }

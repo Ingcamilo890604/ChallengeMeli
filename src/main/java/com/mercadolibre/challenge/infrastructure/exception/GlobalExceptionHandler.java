@@ -1,6 +1,7 @@
 package com.mercadolibre.challenge.infrastructure.exception;
 
 import com.mercadolibre.challenge.domain.exception.ConcurrencyException;
+import com.mercadolibre.challenge.domain.exception.InitializationException;
 import com.mercadolibre.challenge.domain.exception.ProductNotFoundException;
 import com.mercadolibre.challenge.domain.exception.ProductValidationException;
 import lombok.extern.slf4j.Slf4j;
@@ -85,6 +86,27 @@ public class GlobalExceptionHandler {
         );
         
         return new ResponseEntity<>(errorResponse, HttpStatus.CONFLICT);
+    }
+
+    /**
+     * Handle InitializationException
+     * @param ex the exception
+     * @param request the web request
+     * @return 500 Internal Server Error response with error details
+     */
+    @ExceptionHandler(InitializationException.class)
+    public ResponseEntity<ErrorResponse> handleInitializationException(
+            InitializationException ex, WebRequest request) {
+        log.error("Initialization error: {}", ex.getMessage());
+        
+        ErrorResponse errorResponse = new ErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                ex.getMessage(),
+                request.getDescription(false),
+                LocalDateTime.now()
+        );
+        
+        return new ResponseEntity<>(errorResponse, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     /**

@@ -13,7 +13,6 @@ class ProductTest {
 
     @Test
     void testProductBuilder() {
-        // Arrange
         String id = "prod-001";
         String title = "Test Product";
         String description = "Test Description";
@@ -30,7 +29,6 @@ class ProductTest {
                 Review.builder().id("rev-001").userId("user-001").userName("Test User").comment("Great product").rating(5).build()
         );
 
-        // Act
         Product product = Product.builder()
                 .id(id)
                 .title(title)
@@ -44,7 +42,6 @@ class ProductTest {
                 .reviews(reviews)
                 .build();
 
-        // Assert
         assertEquals(id, product.getId());
         assertEquals(title, product.getTitle());
         assertEquals(description, product.getDescription());
@@ -59,7 +56,6 @@ class ProductTest {
 
     @Test
     void testGettersAndSetters() {
-        // Arrange
         Product product = new Product();
         String id = "prod-002";
         String title = "Another Product";
@@ -72,7 +68,6 @@ class ProductTest {
         Double rating = 3.5;
         List<Review> reviews = new ArrayList<>();
 
-        // Act
         product.setId(id);
         product.setTitle(title);
         product.setDescription(description);
@@ -84,7 +79,6 @@ class ProductTest {
         product.setRating(rating);
         product.setReviews(reviews);
 
-        // Assert
         assertEquals(id, product.getId());
         assertEquals(title, product.getTitle());
         assertEquals(description, product.getDescription());
@@ -99,7 +93,6 @@ class ProductTest {
 
     @Test
     void testEqualsAndHashCode() {
-        // Arrange
         Product product1 = Product.builder()
                 .id("prod-001")
                 .title("Test Product")
@@ -121,7 +114,6 @@ class ProductTest {
                 .price(new BigDecimal("199.99"))
                 .build();
 
-        // Assert
         assertEquals(product1, product2);
         assertEquals(product1.hashCode(), product2.hashCode());
         assertNotEquals(product1, product3);
@@ -130,16 +122,13 @@ class ProductTest {
 
     @Test
     void testToString() {
-        // Arrange
         Product product = Product.builder()
                 .id("prod-001")
                 .title("Test Product")
                 .build();
 
-        // Act
         String toString = product.toString();
 
-        // Assert
         assertTrue(toString.contains("id=prod-001"));
         assertTrue(toString.contains("title=Test Product"));
     }

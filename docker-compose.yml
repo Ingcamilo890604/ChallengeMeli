@@ -1,0 +1,43 @@
+version: '3.8'
+
+services:
+  challenge-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: challenge-app
+    ports:
+      - "8085:8085"
+    volumes:
+      - challenge-data:/app/data
+    # Custom command to ensure products.json exists in the volume
+    command: >
+      sh -c "
+        echo 'Checking for products.json in data directory'
+        if [ ! -f /app/data/products.json ] || [ ! -s /app/data/products.json ]; then
+          echo 'Initializing data volume with products.json (file missing or empty)'
+          cp /app/products.json.template /app/data/products.json
+          echo 'Verifying file was copied successfully'
+          ls -la /app/data/
+          cat /app/data/products.json | head -5
+        else
+          echo 'products.json already exists in volume'
+          ls -la /app/data/
+        fi
+        echo 'Starting application'
+        java -jar app.jar
+      "
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      # Add any other environment variables if needed
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8085/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  challenge-data:
+    # This creates a named volume for persistent data storage

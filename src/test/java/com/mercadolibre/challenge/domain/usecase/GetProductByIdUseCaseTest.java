@@ -43,31 +43,25 @@ class GetProductByIdUseCaseTest {
     }
 
     @Test
-    void execute_whenProductExists_shouldReturnProduct() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testExecuteWhenProductExistsShouldReturnProduct() throws ExecutionException, InterruptedException {
         when(productPort.findById(productId)).thenReturn(CompletableFuture.completedFuture(Optional.of(testProduct)));
 
-        // Act
         CompletableFuture<Optional<Product>> result = getProductByIdUseCase.execute(productId);
         Optional<Product> productOptional = result.get();
 
-        // Assert
         assertTrue(productOptional.isPresent());
         assertEquals(testProduct, productOptional.get());
         verify(productPort).findById(productId);
     }
 
     @Test
-    void execute_whenProductDoesNotExist_shouldReturnEmptyOptional() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testExecuteWhenProductDoesNotExistShouldReturnEmptyOptional() throws ExecutionException, InterruptedException {
         String nonExistentId = "non-existent-id";
         when(productPort.findById(nonExistentId)).thenReturn(CompletableFuture.completedFuture(Optional.empty()));
 
-        // Act
         CompletableFuture<Optional<Product>> result = getProductByIdUseCase.execute(nonExistentId);
         Optional<Product> productOptional = result.get();
 
-        // Assert
         assertFalse(productOptional.isPresent());
         verify(productPort).findById(nonExistentId);
     }

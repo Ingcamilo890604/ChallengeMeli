@@ -54,7 +54,6 @@ class ProductControllerTest {
 
     @BeforeEach
     void setUp() {
-        // Set up test product
         testProduct = Product.builder()
                 .id(productId)
                 .title("Test Product")
@@ -63,7 +62,6 @@ class ProductControllerTest {
                 .type("electronics")
                 .build();
 
-        // Set up test product response DTO
         testProductResponseDTO = ProductResponseDTO.builder()
                 .id(productId)
                 .title("Test Product")
@@ -72,7 +70,6 @@ class ProductControllerTest {
                 .type("electronics")
                 .build();
 
-        // Set up test products list
         testProducts = Arrays.asList(
                 testProduct,
                 Product.builder()
@@ -84,7 +81,6 @@ class ProductControllerTest {
                         .build()
         );
 
-        // Set up test product response DTOs list
         testProductResponseDTOs = Arrays.asList(
                 testProductResponseDTO,
                 ProductResponseDTO.builder()
@@ -98,16 +94,13 @@ class ProductControllerTest {
     }
 
     @Test
-    void getAllProducts_shouldReturnAllProducts() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testGetAllProductsShouldReturnAllProducts() throws ExecutionException, InterruptedException {
         when(getAllProductsUseCasePort.execute()).thenReturn(CompletableFuture.completedFuture(testProducts));
         when(productMapper.toResponseDTOs(testProducts)).thenReturn(testProductResponseDTOs);
 
-        // Act
         CompletableFuture<ResponseEntity<List<ProductResponseDTO>>> result = productController.getAllProducts();
         ResponseEntity<List<ProductResponseDTO>> responseEntity = result.get();
 
-        // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(testProductResponseDTOs, responseEntity.getBody());
         verify(getAllProductsUseCasePort).execute();
@@ -115,16 +108,13 @@ class ProductControllerTest {
     }
 
     @Test
-    void getProductById_whenProductExists_shouldReturnProduct() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testGetProductByIdWhenProductExistsShouldReturnProduct() throws ExecutionException, InterruptedException {
         when(getProductByIdUseCasePort.execute(productId)).thenReturn(CompletableFuture.completedFuture(Optional.of(testProduct)));
         when(productMapper.toResponseDTO(testProduct)).thenReturn(testProductResponseDTO);
 
-        // Act
         CompletableFuture<ResponseEntity<ProductResponseDTO>> result = productController.getProductById(productId);
         ResponseEntity<ProductResponseDTO> responseEntity = result.get();
 
-        // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(testProductResponseDTO, responseEntity.getBody());
         verify(getProductByIdUseCasePort).execute(productId);
@@ -132,23 +122,19 @@ class ProductControllerTest {
     }
 
     @Test
-    void getProductById_whenProductDoesNotExist_shouldReturnNotFound() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testGetProductByIdWhenProductDoesNotExistShouldReturnNotFound() throws ExecutionException, InterruptedException {
         String nonExistentId = "non-existent-id";
         when(getProductByIdUseCasePort.execute(nonExistentId)).thenReturn(CompletableFuture.completedFuture(Optional.empty()));
 
-        // Act
         CompletableFuture<ResponseEntity<ProductResponseDTO>> result = productController.getProductById(nonExistentId);
         ResponseEntity<ProductResponseDTO> responseEntity = result.get();
 
-        // Assert
         assertEquals(HttpStatus.NOT_FOUND, responseEntity.getStatusCode());
         verify(getProductByIdUseCasePort).execute(nonExistentId);
     }
     
     @Test
-    void getProductsByType_shouldReturnProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testGetProductsByTypeShouldReturnProductsOfSpecifiedType() throws ExecutionException, InterruptedException {
         String type = "electronics";
         List<Product> electronicsProducts = List.of(testProduct);
         List<ProductResponseDTO> electronicsProductDTOs = List.of(testProductResponseDTO);
@@ -156,11 +142,9 @@ class ProductControllerTest {
         when(getProductsByTypeUseCasePort.execute(type)).thenReturn(CompletableFuture.completedFuture(electronicsProducts));
         when(productMapper.toResponseDTOs(electronicsProducts)).thenReturn(electronicsProductDTOs);
 
-        // Act
         CompletableFuture<ResponseEntity<List<ProductResponseDTO>>> result = productController.getProductsByType(type);
         ResponseEntity<List<ProductResponseDTO>> responseEntity = result.get();
 
-        // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertEquals(electronicsProductDTOs, responseEntity.getBody());
         verify(getProductsByTypeUseCasePort).execute(type);
@@ -168,8 +152,7 @@ class ProductControllerTest {
     }
     
     @Test
-    void getProductsByType_whenNoProductsOfSpecifiedType_shouldReturnEmptyList() throws ExecutionException, InterruptedException {
-        // Arrange
+    void testGetProductsByTypeWhenNoProductsOfSpecifiedTypeShouldReturnEmptyList() throws ExecutionException, InterruptedException {
         String type = "books";
         List<Product> emptyList = Collections.emptyList();
         List<ProductResponseDTO> emptyDTOList = Collections.emptyList();
@@ -177,11 +160,9 @@ class ProductControllerTest {
         when(getProductsByTypeUseCasePort.execute(type)).thenReturn(CompletableFuture.completedFuture(emptyList));
         when(productMapper.toResponseDTOs(emptyList)).thenReturn(emptyDTOList);
 
-        // Act
         CompletableFuture<ResponseEntity<List<ProductResponseDTO>>> result = productController.getProductsByType(type);
         ResponseEntity<List<ProductResponseDTO>> responseEntity = result.get();
 
-        // Assert
         assertEquals(HttpStatus.OK, responseEntity.getStatusCode());
         assertTrue(responseEntity.getBody().isEmpty());
         verify(getProductsByTypeUseCasePort).execute(type);

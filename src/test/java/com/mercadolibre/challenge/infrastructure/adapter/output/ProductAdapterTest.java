@@ -2,7 +2,7 @@ package com.mercadolibre.challenge.infrastructure.adapter.output;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mercadolibre.challenge.domain.exception.ConcurrencyException;
+import com.mercadolibre.challenge.domain.exception.InitializationException;
 import com.mercadolibre.challenge.domain.model.PaymentMethod;
 import com.mercadolibre.challenge.domain.model.Product;
 import com.mercadolibre.challenge.domain.model.Review;
@@ -30,7 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-class FileProductAdapterTest {
+class ProductAdapterTest {
 
     @Mock
     private ObjectMapper objectMapper;
@@ -38,7 +38,7 @@ class FileProductAdapterTest {
     @TempDir
     Path tempDir;
 
-    private FileProductAdapter fileProductAdapter;
+    private ProductAdapter fileProductAdapter;
     private String dataFilePath;
     private List<Product> testProducts;
 
@@ -46,7 +46,6 @@ class FileProductAdapterTest {
     void setUp() {
         dataFilePath = tempDir.resolve("test-products.json").toString();
         
-        // Create more comprehensive test data that includes all fields in the Product model
         PaymentMethod paymentMethod1 = PaymentMethod.builder()
                 .id("pm-001")
                 .name("Credit Card")
@@ -122,74 +121,59 @@ class FileProductAdapterTest {
     }
 
     @Test
-    void init_shouldLoadDataFromFile() throws IOException {
-        // Arrange
+    void testInitShouldLoadDataFromFile() throws IOException {
         File file = new File(dataFilePath);
         assertTrue(file.createNewFile());
         
-        // Make sure the file has some content to trigger the file.length() > 0 condition
         Files.writeString(file.toPath(), "[]");
         
         when(objectMapper.readValue(any(File.class), any(TypeReference.class))).thenReturn(testProducts);
 
-        // Act
-        fileProductAdapter = new FileProductAdapter(objectMapper, dataFilePath);
+        fileProductAdapter = new ProductAdapter(objectMapper, dataFilePath);
         fileProductAdapter.init();
 
-        // Assert
         verify(objectMapper).readValue(any(File.class), any(TypeReference.class));
     }
 
     @Test
-    void init_whenFileIsEmpty_shouldNotThrowException() throws IOException {
-        // Arrange
+    void testInitWhenFileIsEmptyShouldNotThrowException() throws IOException {
         File file = new File(dataFilePath);
         assertTrue(file.createNewFile());
 
-        // Act & Assert
-        fileProductAdapter = new FileProductAdapter(objectMapper, dataFilePath);
+        fileProductAdapter = new ProductAdapter(objectMapper, dataFilePath);
         assertDoesNotThrow(() -> fileProductAdapter.init());
     }
 
     @Test
-    void init_whenIOExceptionOccurs_shouldThrowConcurrencyException() throws IOException {
-        // Arrange
+    void testInitWhenIOExceptionOccursShouldThrowInitializationException() throws IOException {
         File file = new File(dataFilePath);
         assertTrue(file.createNewFile());
         
-        // Make sure the file has some content to trigger the file.length() > 0 condition
         Files.writeString(file.toPath(), "[]");
         
-        // Use any(File.class) instead of eq(file) to make the mock more flexible
         when(objectMapper.readValue(any(File.class), any(TypeReference.class)))
             .thenThrow(new IOException("Test exception"));
 
-        // Act & Assert
-        fileProductAdapter = new FileProductAdapter(objectMapper, dataFilePath);
-        assertThrows(ConcurrencyException.class, () -> fileProductAdapter.init());
+        fileProductAdapter = new ProductAdapter(objectMapper, dataFilePath);
+        assertThrows(InitializationException.class, () -> fileProductAdapter.init());
     }
 
     @Test
-    void findById_whenProductExists_shouldReturnProduct() throws IOException, ExecutionException, InterruptedException {
-        // Arrange
+    void testFindByIdWhenProductExistsShouldReturnProduct() throws IOException, ExecutionException, InterruptedException {
         File file = new File(dataFilePath);
         assertTrue(file.createNewFile());
         
-        // Make sure the file has some content to trigger the file.length() > 0 condition
         Files.writeString(file.toPath(), "[]");
         
         when(objectMapper.readValue(any(File.class), any(TypeReference.class))).thenReturn(testProducts);
         
-        fileProductAdapter = new FileProductAdapter(objectMapper, dataFilePath);
+        fileProductAdapter = new ProductAdapter(objectMapper, dataFilePath);
         fileProductAdapter.init();
         
-        // Verify that the products were loaded into the cache
         verify(objectMapper).readValue(any(File.class), any(TypeReference.class));
 
-        // Act
         Optional<Product> result = fileProductAdapter.findById("prod-001").get();
 
-        // Assert
         assertTrue(result.isPresent());
         Product product = result.get();
         assertEquals("prod-001", product.getId());
@@ -211,55 +195,44 @@ class FileProductAdapterTest {
     }
 
     @Test
-    void findById_whenProductDoesNotExist_shouldReturnEmptyOptional() throws IOException, ExecutionException, InterruptedException {
-        // Arrange
+    void testFindByIdWhenProductDoesNotExistShouldReturnEmptyOptional() throws IOException, ExecutionException, InterruptedException {
         File file = new File(dataFilePath);
         assertTrue(file.createNewFile());
         
-        // Make sure the file has some content to trigger the file.length() > 0 condition
         Files.writeString(file.toPath(), "[]");
         
         when(objectMapper.readValue(any(File.class), any(TypeReference.class))).thenReturn(testProducts);
         
-        fileProductAdapter = new FileProductAdapter(objectMapper, dataFilePath);
+        fileProductAdapter = new ProductAdapter(objectMapper, dataFilePath);
         fileProductAdapter.init();
         
-        // Verify that the products were loaded into the cache
         verify(objectMapper).readValue(any(File.class), any(TypeReference.class));
 
-        // Act
         Optional<Product> result = fileProductAdapter.findById("non-existent-id").get();
 
-        // Assert
         assertFalse(result.isPresent());
     }
 
     @Test
-    void findAll_shouldReturnAllProducts() throws IOException, ExecutionException, InterruptedException {
-        // Arrange
+    void testFindAllShouldReturnAllProducts() throws IOException, ExecutionException, InterruptedException {
         File file = new File(dataFilePath);
         assertTrue(file.createNewFile());
         
-        // Make sure the file has some content to trigger the file.length() > 0 condition
         Files.writeString(file.toPath(), "[]");
         
         when(objectMapper.readValue(any(File.class), any(TypeReference.class))).thenReturn(testProducts);
         
-        fileProductAdapter = new FileProductAdapter(objectMapper, dataFilePath);
+        fileProductAdapter = new ProductAdapter(objectMapper, dataFilePath);
         fileProductAdapter.init();
         
-        // Verify that the products were loaded into the cache
         verify(objectMapper).readValue(any(File.class), any(TypeReference.class));
 
-        // Act
         List<Product> result = fileProductAdapter.findAll().get();
 
-        // Assert
         assertEquals(2, result.size());
         assertTrue(result.stream().anyMatch(p -> p.getId().equals("prod-001")));
         assertTrue(result.stream().anyMatch(p -> p.getId().equals("prod-002")));
         
-        // Verify product details
         Product product2 = result.stream()
                 .filter(p -> p.getId().equals("prod-002"))
                 .findFirst()
@@ -277,21 +250,13 @@ class FileProductAdapterTest {
     }
     
     @Test
-    void init_shouldCreateDirectoryIfNotExists()  {
-        // Arrange
-        // Create a nested path that doesn't exist
+    void testInitShouldCreateDirectoryIfNotExists()  {
         Path nestedDir = tempDir.resolve("nested/directory");
         String nestedFilePath = nestedDir.resolve("test-products.json").toString();
         
-        // We don't need to mock the readValue call since the file will be empty
-        // and the loadDataFromFile method won't call readValue
-        
-        // Act
-        fileProductAdapter = new FileProductAdapter(objectMapper, nestedFilePath);
+        fileProductAdapter = new ProductAdapter(objectMapper, nestedFilePath);
         fileProductAdapter.init();
         
-        // Assert
         assertTrue(Files.exists(nestedDir));
-        // No need to verify readValue since it won't be called for an empty file
     }
 }

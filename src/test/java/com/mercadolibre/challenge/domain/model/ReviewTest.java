@@ -10,7 +10,6 @@ class ReviewTest {
 
     @Test
     void testReviewBuilder() {
-        // Arrange
         String id = "rev-001";
         String userId = "user-001";
         String userName = "Test User";
@@ -18,7 +17,6 @@ class ReviewTest {
         Integer rating = 5;
         LocalDateTime createdAt = LocalDateTime.of(2025, 7, 20, 10, 30);
 
-        // Act
         Review review = Review.builder()
                 .id(id)
                 .userId(userId)
@@ -28,7 +26,6 @@ class ReviewTest {
                 .createdAt(createdAt)
                 .build();
 
-        // Assert
         assertEquals(id, review.getId());
         assertEquals(userId, review.getUserId());
         assertEquals(userName, review.getUserName());
@@ -39,7 +36,6 @@ class ReviewTest {
 
     @Test
     void testGettersAndSetters() {
-        // Arrange
         Review review = new Review();
         String id = "rev-002";
         String userId = "user-002";
@@ -48,7 +44,6 @@ class ReviewTest {
         Integer rating = 4;
         LocalDateTime createdAt = LocalDateTime.of(2025, 7, 21, 15, 45);
 
-        // Act
         review.setId(id);
         review.setUserId(userId);
         review.setUserName(userName);
@@ -56,7 +51,6 @@ class ReviewTest {
         review.setRating(rating);
         review.setCreatedAt(createdAt);
 
-        // Assert
         assertEquals(id, review.getId());
         assertEquals(userId, review.getUserId());
         assertEquals(userName, review.getUserName());
@@ -67,7 +61,6 @@ class ReviewTest {
 
     @Test
     void testEqualsAndHashCode() {
-        // Arrange
         LocalDateTime createdAt = LocalDateTime.of(2025, 7, 20, 10, 30);
         
         Review review1 = Review.builder()
@@ -97,7 +90,6 @@ class ReviewTest {
                 .createdAt(LocalDateTime.of(2025, 7, 21, 15, 45))
                 .build();
 
-        // Assert
         assertEquals(review1, review2);
         assertEquals(review1.hashCode(), review2.hashCode());
         assertNotEquals(review1, review3);
@@ -106,7 +98,6 @@ class ReviewTest {
 
     @Test
     void testToString() {
-        // Arrange
         Review review = Review.builder()
                 .id("rev-001")
                 .userId("user-001")
@@ -114,10 +105,8 @@ class ReviewTest {
                 .rating(5)
                 .build();
 
-        // Act
         String toString = review.toString();
 
-        // Assert
         assertTrue(toString.contains("id=rev-001"));
         assertTrue(toString.contains("userId=user-001"));
         assertTrue(toString.contains("userName=Test User"));

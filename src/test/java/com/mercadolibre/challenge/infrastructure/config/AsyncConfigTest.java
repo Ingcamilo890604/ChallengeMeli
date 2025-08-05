@@ -14,28 +14,22 @@ import static org.mockito.Mockito.verify;
 class AsyncConfigTest {
 
     @Test
-    void virtualThreadTaskExecutor_shouldReturnTaskExecutorAdapter() {
-        // Arrange
+    void testVirtualThreadTaskExecutorShouldReturnTaskExecutorAdapter() {
         AsyncConfig asyncConfig = new AsyncConfig();
 
-        // Act
         AsyncTaskExecutor executor = asyncConfig.virtualThreadTaskExecutor();
 
-        // Assert
         assertNotNull(executor);
         assertInstanceOf(TaskExecutorAdapter.class, executor);
     }
 
     @Test
-    void configureAsyncSupport_shouldSetTaskExecutor() {
-        // Arrange
+    void testConfigureAsyncSupportShouldSetTaskExecutor() {
         AsyncConfig asyncConfig = new AsyncConfig();
         AsyncSupportConfigurer configurer = mock(AsyncSupportConfigurer.class);
 
-        // Act
         asyncConfig.configureAsyncSupport(configurer);
 
-        // Assert
         verify(configurer).setTaskExecutor(any(TaskExecutorAdapter.class));
     }
 }
